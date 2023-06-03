@@ -1,6 +1,7 @@
 package com.yml.hackathon.yemoticare
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,15 +12,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,14 +46,22 @@ import com.yml.hackathon.yemoticare.ui.component.ChatBubbleMe
 import com.yml.hackathon.yemoticare.ui.component.ChatBubbleTyping
 import com.yml.hackathon.yemoticare.ui.component.HintTextField
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ChatScreen(
-    viewModel: MyViewModel
+    viewModel: MyViewModel,
+    onBackPressed: ()-> Unit
 ) {
     Column(
         Modifier
             .fillMaxHeight()
     ) {
+        TopAppBar(title = { Text(text = "Y-Emoticare") }, navigationIcon = {
+            Icon(imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "back navigation", Modifier.clickable {
+                    onBackPressed()
+                }.padding(8.dp))
+        })
         val scrollState = rememberLazyListState()
         val messages = viewModel.messages
         val focusManager = LocalFocusManager.current
@@ -65,8 +79,6 @@ internal fun ChatScreen(
                 .padding(horizontal = 10.dp),
         ) {
             item { Spacer(modifier = Modifier.padding(top = 10.dp)) }
-
-            if (messages.isEmpty()) item { EmptyMessage() }
 
             items(messages) { item ->
                 when (item) {
@@ -115,21 +127,5 @@ internal fun ChatScreen(
         }
     }
 }
-
-@Composable
-private fun EmptyMessage() {
-    Text(
-        text = "Hi, How can i help...",
-        color = Color.White,
-        modifier = Modifier
-            .padding(horizontal = 10.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.DarkGray)
-            .padding(vertical = 8.dp)
-            .fillMaxWidth(),
-        textAlign = TextAlign.Center,
-    )
-}
-
 
 

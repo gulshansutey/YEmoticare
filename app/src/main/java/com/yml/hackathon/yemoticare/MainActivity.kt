@@ -21,8 +21,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var yChat: YChat
     private val viewModel by viewModels<MyViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +48,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
             composable("chat") {
-                ChatScreen(viewModel)
+                ChatScreen(viewModel) {
+                    navController.popBackStack()
+                }
             }
         }
     }
