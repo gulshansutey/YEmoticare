@@ -98,7 +98,7 @@ fun ChatBubbleTyping() {
                         bottomEnd = 8.dp
                     )
                 )
-                .background(Color.Cyan)
+                .background(Color.DarkGray)
                 .padding(horizontal = 10.dp)
                 .padding(vertical = 4.dp),
         )

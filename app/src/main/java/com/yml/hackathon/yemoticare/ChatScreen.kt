@@ -13,12 +13,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,6 +50,10 @@ internal fun ChatScreen(
     ) {
         val scrollState = rememberLazyListState()
         val messages = viewModel.messages
+        val focusManager = LocalFocusManager.current
+        val isLoading by rememberSaveable {
+            viewModel.isLoading
+        }
         var text by rememberSaveable {
             mutableStateOf("")
         }
@@ -78,12 +87,19 @@ internal fun ChatScreen(
                 modifier = Modifier.weight(1F),
                 hint = "Your message",
                 enabled = true,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Send
+                ),
                 onTextChanged = { text = it })
             IconButton(
                 onClick = {
-                    viewModel.sendMessage(text)
-                    text = ""
+                    if (text.isNotEmpty() && !isLoading) {
+                        viewModel.sendMessage(text)
+                        text = ""
+                        focusManager.clearFocus()
+                    }
                 },
                 modifier = Modifier
                     .clip(CircleShape)
@@ -91,7 +107,7 @@ internal fun ChatScreen(
                     .padding(10.dp),
                 enabled = true
             ) {
-                Text(text = "Send")
+                Icon(imageVector = Icons.Filled.Send, "Send")
             }
         }
         LaunchedEffect(messages.size) {
@@ -114,5 +130,6 @@ private fun EmptyMessage() {
         textAlign = TextAlign.Center,
     )
 }
+
 
 
