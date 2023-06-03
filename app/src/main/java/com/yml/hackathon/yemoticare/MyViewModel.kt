@@ -1,10 +1,12 @@
 package com.yml.hackathon.yemoticare
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.yml.ychat.YChat
+import com.yml.hackathon.yemoticare.utils.Utils.getJsonData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,6 +24,12 @@ class MyViewModel @Inject constructor(private val yChat: YChat) : ViewModel() {
         } catch (e: Exception) {
             e.printStackTrace()
             "Error"
+        }
+    }
+
+    fun getModelData(context: Context) {
+        viewModelScope.launch {
+            val json = context.getJsonData("training.json")
         }
     }
 

@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MyViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getModelData(this)
         setContent {
             YEmoticareTheme {
                 // A surface container using the 'background' color from the theme
