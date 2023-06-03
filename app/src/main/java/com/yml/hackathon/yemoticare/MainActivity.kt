@@ -14,10 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import co.yml.ychat.YChat
 import com.yml.hackathon.yemoticare.ui.theme.YEmoticareTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,7 +42,7 @@ class MainActivity : ComponentActivity() {
         NavHost(navController = navController, startDestination = "home") {
             composable("home") {
                 HomeScreen {
-                    navController.navigate("chat")
+                    navController.navigate(it)
                 }
             }
             composable("chat") {
@@ -52,10 +50,14 @@ class MainActivity : ComponentActivity() {
                     navController.popBackStack()
                 }
             }
+            composable("checkin") {
+                CheckInScreen {
+                    navController.popBackStack()
+                }
+            }
         }
     }
 }
-
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
