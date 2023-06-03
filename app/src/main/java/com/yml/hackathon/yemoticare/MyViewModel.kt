@@ -21,7 +21,7 @@ class MyViewModel @Inject constructor(private val chatCompletions: ChatCompletio
     val isLoading = mutableStateOf(false)
 
     init {
-        messages.add(ChatMessage.AI("Hi, How can i help..."))
+        messages.add(ChatMessage.AI("Welcome to Y-EmotiCare. I'm here to assist you based on your check-in data. It seems like you had a restful sleep and your day has been going well. How can I help you today? "))
     }
 
     fun getModelData(context: Context) {
@@ -29,6 +29,7 @@ class MyViewModel @Inject constructor(private val chatCompletions: ChatCompletio
             val json = context.readJsonFile("training.json")
             val results: List<ChatBotContext> =
                 Gson().fromJson(json, object : TypeToken<List<ChatBotContext>>() {}.type)
+            chatCompletions.addMessage(role = "assistant", content = "Welcome to Y-EmotiCare. I'm here to assist you based on your check-in data. It seems like you had a restful sleep and your day has been going well. How can I help you today? ")
             results.forEach {
                 chatCompletions.addMessage(role = it.type, content = it.message)
             }
@@ -52,7 +53,7 @@ class MyViewModel @Inject constructor(private val chatCompletions: ChatCompletio
                 messages.add(ChatMessage.AI(it.first().content))
             }
             .onFailure {
-                Log.d("Answer", it.message.toString())
+                Log.d("Error", it.message.toString())
             }
     }
 

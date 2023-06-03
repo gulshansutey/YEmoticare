@@ -55,7 +55,7 @@ fun HomeScreen(onNavigation: (String) -> Unit) {
         ) {
             HeartbeatAnimation()
             Text(
-                text = "Y-Emoticare",
+                text = "Y-EmotiCare",
                 fontSize = 38.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
