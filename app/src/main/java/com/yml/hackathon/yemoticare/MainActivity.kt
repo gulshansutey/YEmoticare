@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import co.yml.ychat.YChat
 import com.yml.hackathon.yemoticare.ui.theme.YEmoticareTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,13 +33,28 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen()
-                    // ChatScreen(viewModel)
+                    NavHosting()
                 }
             }
         }
     }
+
+    @Composable
+    fun NavHosting() {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = "home") {
+            composable("home") {
+                HomeScreen {
+                    navController.navigate("chat")
+                }
+            }
+            composable("chat") {
+                ChatScreen(viewModel)
+            }
+        }
+    }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
